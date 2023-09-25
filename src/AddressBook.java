@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 public class AddressBook {
     private ArrayList<BuddyInfo> buddys;
-
+    // This is me ftom git
     public AddressBook() {
         buddys = new ArrayList<BuddyInfo>();
     }
