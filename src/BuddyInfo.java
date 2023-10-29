@@ -26,4 +26,21 @@ public class BuddyInfo {
         BuddyInfo buddy = new BuddyInfo("","Homer","");
         System.out.println("Hello "+buddy.getName());
     }
+
+    @Override
+    public String toString(){
+        return name + " (" + address + ", " + phone_number + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        BuddyInfo buddyInfo = (BuddyInfo) obj;
+
+        if(!name.equals(buddyInfo.name)) return false;
+        if(!address.equals(buddyInfo.address)) return false;
+        return phone_number.equals(buddyInfo.phone_number);
+    }
 }
