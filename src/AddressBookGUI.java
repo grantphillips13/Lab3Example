@@ -9,6 +9,8 @@ public class AddressBookGUI {
     private DefaultListModel<BuddyInfo> listModel;
     private AddressBook addressBook;
 
+    private JMenuItem saveAddressBook;
+
 
     private ArrayList<BuddyInfo> buddys;
 
@@ -83,9 +85,60 @@ public class AddressBookGUI {
         buddyMenu.add(removeBuddy);
 
 
+        JMenuItem saveAddressBook = new JMenuItem("Save AddressBook");
+        saveAddressBook.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fileName = JOptionPane.showInputDialog(frame, "Enter file name to save:");
+                if (fileName != null && !fileName.trim().isEmpty()) {
+                    addressBook.save(fileName);
+                    JOptionPane.showMessageDialog(frame, "AddressBook saved to " + fileName, "Save Successful", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+        addressMenu.add(saveAddressBook);
+
+        JMenuItem exportMenuItem = new JMenuItem("Export AddressBook");
+        exportMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exportAddressBook();
+            }
+        });
+        addressMenu.add(exportMenuItem);
+
+        JMenuItem importMenuItem = new JMenuItem("Import AddressBook");
+        importMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performImport();
+            }
+        });
+        addressMenu.add(importMenuItem);
 
 
+    }
 
+    private void performImport() {
+        String fileName = JOptionPane.showInputDialog(frame, "Enter the name of the file to import from:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            AddressBook importedAddressBook = AddressBook.importAddressBook(fileName);
+            listModel.clear(); // Clearing the existing list
+            for (BuddyInfo buddy : importedAddressBook.getBuddy()) {
+                listModel.addElement(buddy); // Adding imported buddies to the list
+            }
+            JOptionPane.showMessageDialog(frame, "AddressBook imported from " + fileName, "Import Successful", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame, "Import cancelled or no file name provided", "Import Cancelled", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void exportAddressBook() {
+        String fileName = JOptionPane.showInputDialog(frame, "Enter the name of the file to export to:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            addressBook.save(fileName);
+            JOptionPane.showMessageDialog(frame, "AddressBook exported to " + fileName, "Export Successful", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
