@@ -116,7 +116,42 @@ public class AddressBookGUI {
         });
         addressMenu.add(importMenuItem);
 
+        // Menu item for serialization
+        JMenuItem serializeItem = new JMenuItem("Serialize AddressBook");
+        serializeItem.addActionListener(e -> {
+            String fileName = JOptionPane.showInputDialog(frame, "Enter file name to serialize to:");
+            if (fileName != null && !fileName.trim().isEmpty()) {
+                addressBook.serializeToFile(fileName);
+                JOptionPane.showMessageDialog(frame, "Serialized to " + fileName);
+            }
+        });
+        addressMenu.add(serializeItem);
 
+
+        JMenuItem deserializeItem = new JMenuItem("Deserialize AddressBook");
+        deserializeItem.addActionListener(e -> performDeserialization());
+        addressMenu.add(deserializeItem);
+
+
+    }
+
+    private void performDeserialization() {
+        String fileName = JOptionPane.showInputDialog(frame, "Enter the name of the file to deserialize from:");
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            AddressBook deserializedAddressBook = AddressBook.deserializeFromFile(fileName);
+            if (deserializedAddressBook != null) {
+                addressBook = deserializedAddressBook; // Update the main AddressBook reference
+                listModel.clear(); // Clear existing data in the list model
+                for (BuddyInfo buddy : addressBook.getBuddy()) {
+                    listModel.addElement(buddy); // Add deserialized buddies to the list
+                }
+                JOptionPane.showMessageDialog(frame, "AddressBook deserialized from " + fileName, "Deserialization Successful", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Deserialization failed", "Deserialization Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "Deserialization cancelled or no file name provided", "Deserialization Cancelled", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void performImport() {

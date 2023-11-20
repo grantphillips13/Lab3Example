@@ -1,13 +1,14 @@
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.*;
 
 
-public class AddressBook {
+public class AddressBook implements Serializable {
 
     private ArrayList<BuddyInfo> buddys;
 
@@ -55,6 +56,24 @@ public class AddressBook {
         }
 
         return addressBook;
+    }
+
+    public void serializeToFile(String fileName) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            out.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to deserialize (import) AddressBook
+    public static AddressBook deserializeFromFile(String fileName) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            return (AddressBook) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

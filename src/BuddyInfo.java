@@ -1,5 +1,6 @@
 import java.util.Scanner;
-public class BuddyInfo {
+import java.io.Serializable;
+public class BuddyInfo implements Serializable {
 
     public String getName() {
         return name;

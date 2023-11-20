@@ -28,4 +28,30 @@ class AddressBookTest {
             assertEquals(originalBuddy.getPhoneNumber().trim(), importedBuddy.getPhoneNumber().trim(), "Phone numbers do not match");
         }
     }
+
+
+
+        @Test
+        void testSerialization() {
+            AddressBook original = new AddressBook();
+            original.addBuddy(new BuddyInfo("123 Maple St", "Alice", "555-1234"));
+            original.addBuddy(new BuddyInfo("456 Oak St", "Bob", "555-5678"));
+
+            String fileName = "serializedAddressBook.dat";
+            original.serializeToFile(fileName);
+
+            AddressBook deserialized = AddressBook.deserializeFromFile(fileName);
+            assertNotNull(deserialized, "Deserialized object is null");
+            assertEquals(original.getBuddy().size(), deserialized.getBuddy().size(), "Sizes do not match");
+
+            for (int i = 0; i < original.getBuddy().size(); i++) {
+                BuddyInfo originalBuddy = original.getBuddy().get(i);
+                BuddyInfo deserializedBuddy = deserialized.getBuddy().get(i);
+
+                assertEquals(originalBuddy.getName(), deserializedBuddy.getName(), "Names do not match for Buddy at index " + i);
+                assertEquals(originalBuddy.getAddress(), deserializedBuddy.getAddress(), "Addresses do not match for Buddy at index " + i);
+                assertEquals(originalBuddy.getPhoneNumber(), deserializedBuddy.getPhoneNumber(), "Phone numbers do not match for Buddy at index " + i);
+            }
+        }
+
 }
