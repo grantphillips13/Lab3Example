@@ -29,6 +29,18 @@ public class BuddyInfo implements Serializable {
         System.out.println("Hello "+buddy.getName());
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setAddress(String address){
+        this.address = address;
+    }
+
+    public void setPhone_number(String phoneNumber){
+        this.phone_number = phoneNumber;
+    }
+
     @Override
     public String toString(){
         return name + " #" + address + " #" + phone_number;

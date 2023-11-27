@@ -132,6 +132,41 @@ public class AddressBookGUI {
         deserializeItem.addActionListener(e -> performDeserialization());
         addressMenu.add(deserializeItem);
 
+        JMenuItem exportXmlItem = new JMenuItem("Export to XML");
+        exportXmlItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fileName = JOptionPane.showInputDialog(frame, "Enter the file name to export to XML:");
+                if (fileName != null && !fileName.trim().isEmpty()) {
+                    addressBook.exportToXmlFile(fileName);
+                    JOptionPane.showMessageDialog(frame, "Address Book exported to XML in " + fileName);
+                }
+            }
+        });
+        addressMenu.add(exportXmlItem);
+
+        JMenuItem importXmlItem = new JMenuItem("Import from XML");
+        importXmlItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fileName = JOptionPane.showInputDialog(frame, "Enter the file name to import from XML:");
+                if (fileName != null && !fileName.trim().isEmpty()) {
+                    AddressBook importedAddressBook = AddressBook.importFromXmlFile(fileName);
+                    if (importedAddressBook != null) {
+                        addressBook = importedAddressBook;
+                        listModel.clear();
+                        for (BuddyInfo buddy : addressBook.getBuddy()) {
+                            listModel.addElement(buddy);
+                        }
+                        JOptionPane.showMessageDialog(frame, "Address Book imported from " + fileName);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Failed to import Address Book from XML", "Import Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        addressMenu.add(importXmlItem);
+
 
     }
 
@@ -154,6 +189,8 @@ public class AddressBookGUI {
         }
     }
 
+
+
     private void performImport() {
         String fileName = JOptionPane.showInputDialog(frame, "Enter the name of the file to import from:");
         if (fileName != null && !fileName.trim().isEmpty()) {
@@ -175,6 +212,8 @@ public class AddressBookGUI {
             JOptionPane.showMessageDialog(frame, "AddressBook exported to " + fileName, "Export Successful", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
